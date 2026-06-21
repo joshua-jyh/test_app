@@ -36,7 +36,28 @@ bin/dev
 cp .env.example .env
 ```
 
-本機開發使用 SQLite，不需要額外資料庫服務。部署環境使用 `.env` 內的 MySQL 連線設定。
+本機開發使用 SQLite，不需要額外資料庫服務。staging／production 的 MySQL
+連線設定存放在各環境的 Rails credentials：
+
+```bash
+EDITOR="$EDITOR" bin/rails credentials:edit --environment staging
+EDITOR="$EDITOR" bin/rails credentials:edit --environment production
+```
+
+credentials 內容：
+
+```yaml
+database:
+  host: 127.0.0.1
+  port: 3306
+  name: test_app_staging
+  username: test_app
+  password: replace_with_a_strong_password
+```
+
+production 請將 `name` 改為 `test_app_production`，並填入 production
+實際使用的帳號與密碼。部署時必須讓主機能讀取對應環境的 credentials key，
+例如 `config/credentials/staging.key` 或 `RAILS_MASTER_KEY`。
 
 ## 測試與建置
 
@@ -69,7 +90,8 @@ initr deploy \
   --deploy-to /var/www/test_app
 ```
 
-`.env` 內容可參考 `.env.example`，必須在首次 deploy 前填入正式的 MySQL 設定。
+`.env` 內容可參考 `.env.example`。MySQL 連線資訊請放在對應環境的 Rails
+credentials，不要寫入 `.env`。
 
 ## Initr 更新
 
