@@ -24,6 +24,19 @@ namespace :demo do
     puts "示範文章已準備完成：#{post.title}"
   end
 
+  desc "隨機更新一篇文章的內文"
+  task update_post_body: :environment do
+    post_count = Post.count
+    post = Post.order(:id).offset(rand(post_count)).first if post_count.positive?
+
+    abort "找不到文章，請先執行 bin/rails db:seed" unless post
+
+    post.update!(body: Demo::PostContentGenerator.generate)
+
+    puts "文章內文已更新：##{post.id} #{post.title}"
+    puts post.body
+  end
+
   desc "發布目前所有草稿"
   task publish_drafts: :environment do
     drafts = Post.where(published_at: nil)

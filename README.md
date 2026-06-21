@@ -27,8 +27,18 @@ bin/dev
 - Rails + Vue：http://localhost:3000
 - Rails health check：http://localhost:3000/up
 - Rails JSON API：http://localhost:3000/api/status
+- Seed 展示資料 API：http://localhost:3000/api/demo_data
 
 `bin/dev` 會透過 Foreman 同時啟動 Rails 與 Vite。
+
+可手動執行 demo task，從獨立字庫產生內容並隨機更新一篇文章：
+
+```bash
+bin/rails demo:update_post_body
+```
+
+執行後可在首頁按「重新讀取」，確認文章內文與更新時間已改變。Initr 的
+staging update task 也設定為執行此 task。
 
 ## 環境設定
 
