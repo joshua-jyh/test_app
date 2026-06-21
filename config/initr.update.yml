@@ -28,7 +28,7 @@ commands:
 
 # 若更新前需要執行一次性資料修正，填入 Rails task，例如 data:backfill。
 update:
-  task: ''
+  task: 'demo:create_post'
 
 whenever:
   enabled: true
