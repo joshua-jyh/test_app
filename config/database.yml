@@ -1,0 +1,29 @@
+sqlite: &sqlite
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *sqlite
+  database: storage/development.sqlite3
+
+test:
+  <<: *sqlite
+  database: storage/test.sqlite3
+
+deployed: &deployed
+  adapter: mysql2
+  encoding: utf8mb4
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("DB_HOST", "127.0.0.1") %>
+  port: <%= ENV.fetch("DB_PORT", 3306) %>
+  username: <%= ENV.fetch("DB_USERNAME", "test_app") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "") %>
+
+staging:
+  <<: *deployed
+  database: <%= ENV.fetch("DB_NAME", "test_app_staging") %>
+
+production:
+  <<: *deployed
+  database: <%= ENV.fetch("DB_NAME", "test_app_production") %>

@@ -1,0 +1,71 @@
+application: test_app
+keep_releases: 5
+default_environment: staging
+
+# repository 與 deploy_to 建議由 initr deploy 的 --git / --deploy-to 提供。
+
+system:
+  sudo_command: sudo
+
+shared:
+  directories:
+    - log
+    - tmp/pids
+    - tmp/cache
+    - storage
+    - public/uploads
+  files:
+    - .env
+
+commands:
+  bundle: bundle config set --local deployment true && bundle config set --local without 'development test' && bundle install
+  frontend_install: npm ci
+  frontend_build: npm run build
+  precompile_assets: bundle exec rails assets:precompile
+  migrate: bundle exec rails db:migrate
+  seed: bundle exec rails db:seed
+  update_task: bundle exec rails %{task}
+  restart_app: bin/rails restart
+
+update:
+  task: ''
+
+whenever:
+  enabled: false
+  identifier: ''
+  clear_legacy_timestamp_crontabs: true
+
+database:
+  adapter: mysql
+  host: 127.0.0.1
+  port: 3306
+  username: test_app
+  password: ''
+  database: test_app_staging
+  use_sudo_for_backup: false
+
+web_server:
+  preferred: nginx
+  service_name: nginx
+  config_path: /etc/nginx/sites-enabled/test_app.conf
+
+health_check:
+  url: http://127.0.0.1/up
+
+environments:
+  staging:
+    rails_env: staging
+    branch: staging
+    server_name: staging.test-app.local
+    app_port: 3001
+    run_seeds: false
+    database:
+      database: test_app_staging
+  production:
+    rails_env: production
+    branch: main
+    server_name: test-app.local
+    app_port: 3000
+    run_seeds: false
+    database:
+      database: test_app_production
