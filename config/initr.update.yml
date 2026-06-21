@@ -16,9 +16,10 @@ shared:
     - .env
 
 commands:
-  bundle: bundle config set --local deployment true && bundle config set --local without 'development test' && bundle install
+  bundle: bundle install
   frontend_install: npm ci
   frontend_build: npm run build
+  clobber_assets: bundle exec rails assets:clobber
   precompile_assets: bundle exec rails assets:precompile
   migrate: bundle exec rails db:migrate
   seed: bundle exec rails db:seed
@@ -34,15 +35,6 @@ whenever:
   identifier: ''
   clear_legacy_timestamp_crontabs: true
 
-database:
-  adapter: mysql
-  host: 127.0.0.1
-  port: 3306
-  username: test_app
-  password: ''
-  database: test_app_staging
-  use_sudo_for_backup: false
-
 web_server:
   preferred: nginx
   service_name: nginx
@@ -57,8 +49,6 @@ environments:
     run_seeds: false
     commands:
       restart_app: RAILS_ENV=staging PORT=3001 bin/deploy-server restart
-    database:
-      database: test_app_staging
   production:
     rails_env: production
     branch: main
@@ -67,5 +57,3 @@ environments:
     run_seeds: false
     commands:
       restart_app: RAILS_ENV=production PORT=3000 bin/deploy-server restart
-    database:
-      database: test_app_production
