@@ -31,7 +31,7 @@ update:
   task: ''
 
 whenever:
-  enabled: false
+  enabled: true
   identifier: ''
   clear_legacy_timestamp_crontabs: true
 

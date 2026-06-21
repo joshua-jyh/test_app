@@ -32,6 +32,8 @@ gem "bootsnap", require: false
 gem "dotenv-rails"
 # Integrate Vite-built Vue assets with Rails views.
 gem "vite_rails"
+# Manage recurring Rails tasks through cron.
+gem "whenever", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
