@@ -101,6 +101,21 @@ initr status staging
 initr logs staging
 ```
 
+若測試環境無法使用 Nginx，部署完成後 Puma 會直接監聽所有網路介面的
+`3001` port，可用下列網址測試：
+
+```text
+http://SERVER_IP:3001
+```
+
+主機防火牆需允許 TCP 3001。可在部署目錄檢查程序與 log：
+
+```bash
+cd /var/www/test_app/current
+RAILS_ENV=staging PORT=3001 bin/deploy-server status
+tail -f log/puma.log
+```
+
 若某次更新需要在 migration 前執行一次性 Rails task，可在
 `config/initr.update.yml` 設定：
 

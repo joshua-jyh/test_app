@@ -1,0 +1,92 @@
+#!/usr/bin/env sh
+
+set -eu
+
+ACTION="${1:-restart}"
+RAILS_ENV="${RAILS_ENV:-staging}"
+PORT="${PORT:-3001}"
+PIDFILE="${PIDFILE:-tmp/pids/puma.pid}"
+LOGFILE="${LOGFILE:-log/puma.log}"
+
+running() {
+  [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null
+}
+
+stop_server() {
+  if ! running; then
+    rm -f "$PIDFILE"
+    echo "Puma is not running."
+    return
+  fi
+
+  pid="$(cat "$PIDFILE")"
+  kill -TERM "$pid"
+
+  attempts=0
+  while kill -0 "$pid" 2>/dev/null; do
+    attempts=$((attempts + 1))
+    if [ "$attempts" -ge 30 ]; then
+      echo "Puma did not stop within 30 seconds." >&2
+      exit 1
+    fi
+    sleep 1
+  done
+
+  rm -f "$PIDFILE"
+  echo "Puma stopped."
+}
+
+start_server() {
+  if running; then
+    echo "Puma is already running with PID $(cat "$PIDFILE")."
+    return
+  fi
+
+  mkdir -p "$(dirname "$PIDFILE")" "$(dirname "$LOGFILE")"
+  rm -f "$PIDFILE"
+
+  setsid env \
+    RAILS_ENV="$RAILS_ENV" \
+    PORT="$PORT" \
+    PIDFILE="$PIDFILE" \
+    RAILS_SERVE_STATIC_FILES=true \
+    bundle exec puma -C config/puma.rb \
+    </dev/null >>"$LOGFILE" 2>&1 &
+
+  attempts=0
+  until running; do
+    attempts=$((attempts + 1))
+    if [ "$attempts" -ge 15 ]; then
+      echo "Puma failed to start. Check $LOGFILE." >&2
+      exit 1
+    fi
+    sleep 1
+  done
+
+  echo "Puma started on 0.0.0.0:$PORT with PID $(cat "$PIDFILE")."
+}
+
+case "$ACTION" in
+  start)
+    start_server
+    ;;
+  stop)
+    stop_server
+    ;;
+  restart)
+    stop_server
+    start_server
+    ;;
+  status)
+    if running; then
+      echo "Puma is running with PID $(cat "$PIDFILE") on port $PORT."
+    else
+      echo "Puma is not running."
+      exit 1
+    fi
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}" >&2
+    exit 2
+    ;;
+esac

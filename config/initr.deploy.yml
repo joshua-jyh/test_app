@@ -25,7 +25,7 @@ commands:
   migrate: bundle exec rails db:migrate
   seed: bundle exec rails db:seed
   update_task: bundle exec rails %{task}
-  restart_app: bin/rails restart
+  restart_app: bin/deploy-server restart
 
 update:
   task: ''
@@ -49,9 +49,6 @@ web_server:
   service_name: nginx
   config_path: /etc/nginx/sites-enabled/test_app.conf
 
-health_check:
-  url: http://127.0.0.1/up
-
 environments:
   staging:
     rails_env: staging
@@ -59,6 +56,8 @@ environments:
     server_name: staging.test-app.local
     app_port: 3001
     run_seeds: false
+    commands:
+      restart_app: RAILS_ENV=staging PORT=3001 bin/deploy-server restart
     database:
       database: test_app_staging
   production:
@@ -67,5 +66,7 @@ environments:
     server_name: test-app.local
     app_port: 3000
     run_seeds: false
+    commands:
+      restart_app: RAILS_ENV=production PORT=3000 bin/deploy-server restart
     database:
       database: test_app_production
