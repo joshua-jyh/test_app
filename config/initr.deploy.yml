@@ -47,7 +47,7 @@ environments:
     branch: staging
     server_name: staging.test-app.local
     app_port: 3001
-    run_seeds: false
+    run_seeds: true
     commands:
       restart_app: RAILS_ENV=staging PORT=3001 bin/deploy-server restart
   production:
