@@ -31,6 +31,9 @@ onMounted(async () => {
       <p class="lead">
         Rails 提供頁面與 API，Vue 3 由 Vite 建置並掛載到同一個應用程式。
       </p>
+      <p class="lead">
+        您好＠♨♨♨♨，這裡是 Vue 前端組件，正在嘗試從 Rails API 讀取狀態資訊。
+      </p>
 
       <dl class="status-grid">
         <div>
