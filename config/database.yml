@@ -22,7 +22,17 @@ deployed: &deployed
   password: <%= Rails.application.credentials.dig(:database, :password) %>
 
 staging:
-  <<: *deployed
+  primary:
+    <<: *deployed
+  secondary:
+    <<: *deployed
+    database: <%= Rails.application.credentials.dig(:database, :secondary_name) %>
+    database_tasks: false
 
 production:
-  <<: *deployed
+  primary:
+    <<: *deployed
+  secondary:
+    <<: *deployed
+    database: <%= Rails.application.credentials.dig(:database, :secondary_name) %>
+    database_tasks: false

@@ -24,6 +24,7 @@ commands:
   migrate: bundle exec rails db:migrate
   seed: bundle exec rails db:seed
   update_task: bundle exec rails %{task}
+# 加上可能 restart 做到 部署完但未 link
   restart_app: bin/deploy-server restart
 
 # 若更新前需要執行一次性資料修正，填入 Rails task，例如 data:backfill。
