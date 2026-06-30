@@ -61,6 +61,9 @@ onMounted(() => {
           您好＠♨♨♨♨，這裡是 Vue 前端組件，正在嘗試從 Rails API 讀取狀態資訊。
         </p>
         <p class="lead">
+          您好測試predeploy。
+        </p>
+        <p class="lead">
           OOO::::SSSSSSSSSSSSSSSSSSSS:::::OOO
         </p>
 
