@@ -55,12 +55,6 @@ onMounted(() => {
         <p class="eyebrow">Rails + Vue 測試專案</p>
         <h1>整合環境已就緒</h1>
         <p class="lead">
-          Rails 提供頁面與 API，Vue 3 由 Vite 建置並掛載到同一個應用程式。
-        </p>
-        <p class="lead">
-          您好＠♨♨♨♨，這裡是 Vue 前端組件，正在嘗試從 Rails API 讀取狀態資訊。
-        </p>
-        <p class="lead">
           您好測試predeploy。
         </p>
         <p class="lead">
