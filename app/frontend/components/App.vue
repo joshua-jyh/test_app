@@ -60,6 +60,9 @@ onMounted(() => {
         <p class="lead">
           您好測試predeploy。
         </p>
+         <p class="lead">
+          您好測試 vup k27。
+        </p>
         <p class="lead">
           OOO::::SSSSSSSSSSSSSSSSSSSS:::::OOO
         </p>
